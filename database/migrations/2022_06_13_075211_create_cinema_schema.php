@@ -37,7 +37,57 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+        
+        Schema::create('administration', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('location', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('address');
+            $table->string('street');
+            $table->string('city', 50);
+            $table->string('state', 2);
+            $table->string('zip', 12);
+            $table->string('phone', 30)->nullable();
+            $table->float('latitude', 10, 6);
+            $table->float('longitude', 10, 6);
+            $table->integer('administration_id')->unsigned()->nullable();
+            $table->foreign('administration_id')->references('id')->on('administration');
+            $table->timestamps();
+        });
+
+        Schema::create('screen', function($table) {
+            $table->increments('id');
+            $table->string('screen_name');
+            $table->string('screen_code');
+            $table->integer('location_id')->unsigned()->nullable();
+            $table->foreign('location_id')->references('id')->on('location');
+            $table->timestamps();
+        });
+
+        Schema::create('movie', function($table) {
+            $table->increments('id');
+            $table->time('start');
+            $table->time('end');
+            $table->integer('screen_id')->unsigned();
+            $table->foreign('screen_id')->references('id')->on('screen')->onDelete('cascade');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        // Schema::create('price', function($table) {
+        //     $table->increments('id');
+        //     $table->time('start');
+        //     $table->time('end');
+        //     $table->integer('screen_id')->unsigned();
+        //     $table->foreign('screen_id')->references('id')->on('screen')->onDelete('cascade');
+        //     $table->string('name');
+        //     $table->timestamps();
+        // });
     }
 
     /**
