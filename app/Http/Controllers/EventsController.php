@@ -101,8 +101,9 @@ class EventsController extends BaseController
      */
 
     public function getEventsWithWorkshops() {
-        $data = Event::join('workshops', 'events.id', '=', 'workshops.event_id')
-                ->get();
+        $data = Event::with('workshops')->get();
+
+        // dd($data);
         return response()->json($data);
     }
 
